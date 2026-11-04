@@ -29,8 +29,6 @@ Cada nodo es un replica set de un solo miembro. Los clientes se conectan siempre
 .
 ├── README.md
 ├── Docker-Compose/            # docker-compose.yml
-├── Operaciones-Configuracion/ # rs.initiate, addShard, id_movie, shardCollection
-├── Operaciones-CRUD/          # inserción, consulta, actualización, eliminación
 └── Reporte/                   # reporte de la práctica y capturas
 ```
 
