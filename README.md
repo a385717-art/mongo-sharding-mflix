@@ -2,7 +2,9 @@
 
 Práctica de **Bases de Datos Distribuidas** (Bases de Datos Avanzadas). Se monta un cluster de MongoDB con sharding sobre Docker, se carga la colección `movies` de la base `sample_mflix`, se define un shard key de tipo **hashed** sobre `id_movie`, y se prueban operaciones CRUD y balanceo de carga entre shards.
 
-**Equipo:** _(nombres de los integrantes)_
+**Equipo:** 
+Ezequiel Adolfo Herrera Hernandez 385717
+Diego Iván Ibarra Lozoya 373781
 
 ## Arquitectura
 
