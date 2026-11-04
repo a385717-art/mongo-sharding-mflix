@@ -21,7 +21,7 @@ Cada nodo es un replica set de un solo miembro. Los clientes se conectan siempre
 ## Requisitos
 
 - Docker y Docker Compose
-- El archivo `sample_mflix.movies.json` (exportación de la colección, 21,349 documentos, ~41 MB). _(Indicar aquí dónde conseguirlo: está en el repo o en un enlace de Drive.)_
+- El archivo `sample_mflix.movies.json` (exportación de la colección, 21,349 documentos, ~41 MB).
 
 ## Estructura del repo
 
