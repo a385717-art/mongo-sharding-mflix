@@ -32,7 +32,6 @@ Cada nodo es un replica set de un solo miembro. Los clientes se conectan siempre
 └── Reporte/                   # reporte de la práctica y capturas
 ```
 
-_(Ajustar los nombres de carpetas a los que realmente tenga el repo.)_
 
 ## Cómo levantar el cluster
 
