@@ -1,0 +1,139 @@
+ultimo id_movie: 21349
+total antes del CRUD: 21349
+
+==================== CREATE ====================
+insertOne -> id_movie 21350, _id 6aebecedba40a3388b71230e
+insertMany -> 10 peliculas
+
+shard de cada pelicula nueva:
+  21350  El Ultimo Commit      SINGLE_SHARD -> shard3
+  21351  Shard de Medianoche   SINGLE_SHARD -> shard1
+  21352  Replica en Chihuahua  SINGLE_SHARD -> shard3
+  21353  El Router Perdido     SINGLE_SHARD -> shard3
+  21354  Balanceo de Carga     SINGLE_SHARD -> shard3
+  21355  Config Server         SINGLE_SHARD -> shard3
+  21356  Hashed                SINGLE_SHARD -> shard3
+  21357  Chunk 404             SINGLE_SHARD -> shard3
+  21358  La Llave del Shard    SINGLE_SHARD -> shard3
+  21359  Mongos y Compania     SINGLE_SHARD -> shard1
+  21360  Primary y Secondary   SINGLE_SHARD -> shard3
+
+total despues de insertar: 21360
+
+==================== READ ====================
+find por id_movie = 100:
+{
+  genres: [
+    'Crime',
+    'Drama'
+  ],
+  title: 'Payment Deferred',
+  year: 1932,
+  id_movie: 100
+}
+consulta: SINGLE_SHARD -> shard1
+
+find por titulo = 'The Godfather':
+{
+  imdb: {
+    rating: 9.2
+  },
+  year: 1972,
+  title: 'The Godfather',
+  id_movie: 2223
+}
+consulta: SHARD_MERGE -> shard3, shard1, shard2
+
+find por año = 1994 (primeras 5 por rating):
+  6117  The Shawshank Redemption (9.3)
+  8539  The Shawshank Redemption (9.3)
+  5878  Baseball (9.1)
+  6085  Pulp Fiction (8.9)
+  5895  Andaz Apna Apna (8.8)
+peliculas de 1994: 305
+
+aggregate: top 5 generos
+  Drama     12387 peliculas, rating prom 6.80
+  Comedy    6535 peliculas, rating prom 6.45
+  Romance   3319 peliculas, rating prom 6.66
+  Crime     2457 peliculas, rating prom 6.69
+  Thriller  2455 peliculas, rating prom 6.30
+
+==================== UPDATE ====================
+updateOne (id_movie 21350): matched 1, modified 1
+{
+  id_movie: 21350,
+  title: 'El Ultimo Commit',
+  runtime: 105,
+  imdb: {
+    rating: 9.1,
+    votes: 120
+  }
+}
+updateMany (prueba: true): matched 11, modified 11
+updateMany (year < 1920): matched 18, modified 18
+
+==================== DELETE ====================
+deleteOne ('El Router Perdido', id_movie 21353): deleted 1
+deleteMany (prueba con rating < 5): deleted 3
+
+peliculas de prueba que quedan:
+  21350  El Ultimo Commit (9.1)
+  21351  Shard de Medianoche (6.9)
+  21352  Replica en Chihuahua (8.1)
+  21355  Config Server (7.3)
+  21357  Chunk 404 (6.1)
+  21358  La Llave del Shard (8.5)
+  21360  Primary y Secondary (7)
+
+total al final: 21356
+
+==================== DISTRIBUCION DESPUES DEL CRUD ====================
+Shard shard1 at shard1/shard1a:27017,shard1b:27017,shard1c:27017
+{
+  data: '10.01MiB',
+  docs: 6491,
+  chunks: 10,
+  'estimated data per chunk': '1MiB',
+  'estimated docs per chunk': 649
+}
+---
+Shard shard2 at shard2/shard2a:27017,shard2b:27017,shard2c:27017
+{
+  data: '12.82MiB',
+  docs: 8369,
+  chunks: 1,
+  'estimated data per chunk': '12.82MiB',
+  'estimated docs per chunk': 8369
+}
+---
+Shard shard3 at shard3/shard3a:27017,shard3b:27017,shard3c:27017
+{
+  data: '9.96MiB',
+  docs: 6496,
+  chunks: 10,
+  'estimated data per chunk': '1020KiB',
+  'estimated docs per chunk': 649
+}
+---
+Totals
+{
+  data: '32.8MiB',
+  docs: 21356,
+  chunks: 21,
+  'Shard shard1': [
+    '30.53 % data',
+    '30.39 % docs in cluster',
+    '1KiB avg obj size on shard'
+  ],
+  'Shard shard2': [
+    '39.08 % data',
+    '39.18 % docs in cluster',
+    '1KiB avg obj size on shard'
+  ],
+  'Shard shard3': [
+    '30.38 % data',
+    '30.41 % docs in cluster',
+    '1KiB avg obj size on shard'
+  ]
+}

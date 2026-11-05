@@ -1,0 +1,194 @@
+Fecha: 2026-11-05T02:41:49.429Z
+MongoDB 7.0.45 - conectado al mongos
+
+########## Replica sets ##########
+shard1 -> shard1/shard1a:27017,shard1b:27017,shard1c:27017
+shard2 -> shard2/shard2a:27017,shard2b:27017,shard2c:27017
+shard3 -> shard3/shard3a:27017,shard3b:27017,shard3c:27017
+config -> configRS/cfg1:27017,cfg2:27017,cfg3:27017
+
+########## sh.status() ##########
+shardingVersion
+{ _id: 1, clusterId: ObjectId('6aebec7c4e302932c48c54f2') }
+---
+shards
+[
+  {
+    _id: 'shard1',
+    host: 'shard1/shard1a:27017,shard1b:27017,shard1c:27017',
+    state: 1,
+    topologyTime: Timestamp({ t: 1793846410, i: 2 })
+  },
+  {
+    _id: 'shard2',
+    host: 'shard2/shard2a:27017,shard2b:27017,shard2c:27017',
+    state: 1,
+    topologyTime: Timestamp({ t: 1793846410, i: 6 })
+  },
+  {
+    _id: 'shard3',
+    host: 'shard3/shard3a:27017,shard3b:27017,shard3c:27017',
+    state: 1,
+    topologyTime: Timestamp({ t: 1793846410, i: 19 })
+  }
+]
+---
+active mongoses
+[ { '7.0.45': 1 } ]
+---
+autosplit
+{ 'Currently enabled': 'yes' }
+---
+automerge
+{ 'Currently enabled': 'yes' }
+---
+balancer
+{
+  'Currently enabled': 'yes',
+  'Currently running': 'no',
+  'Failed balancer rounds in last 5 attempts': 0,
+  'Migration Results for the last 24 hours': { '20': 'Success' }
+}
+---
+shardedDataDistribution
+[
+  {
+    ns: 'sample_mflix.movies',
+    shards: [
+      {
+        shardName: 'shard1',
+        numOrphanedDocs: 0,
+        numOwnedDocuments: 6490,
+        ownedSizeBytes: 10500820,
+        orphanedSizeBytes: 0
+      },
+      {
+        shardName: 'shard3',
+        numOrphanedDocs: 0,
+        numOwnedDocuments: 6490,
+        ownedSizeBytes: 10448900,
+        orphanedSizeBytes: 0
+      },
+      {
+        shardName: 'shard2',
+        numOrphanedDocs: 0,
+        numOwnedDocuments: 8369,
+        ownedSizeBytes: 13440614,
+        orphanedSizeBytes: 0
+      }
+    ]
+  }
+]
+---
+databases
+[
+  {
+    database: { _id: 'config', primary: 'config', partitioned: true },
+    collections: {}
+  },
+  {
+    database: {
+      _id: 'sample_mflix',
+      primary: 'shard2',
+      partitioned: false,
+      version: {
+        uuid: UUID('f28ac221-727b-432f-8335-6282b507ef09'),
+        timestamp: Timestamp({ t: 1793846410, i: 22 }),
+        lastMod: 1
+      }
+    },
+    collections: {
+      'sample_mflix.movies': {
+        shardKey: { id_movie: 'hashed' },
+        unique: false,
+        balancing: true,
+        allowMigrations: true,
+        chunkMetadata: [
+          { shard: 'shard1', nChunks: 10 },
+          { shard: 'shard2', nChunks: 1 },
+          { shard: 'shard3', nChunks: 10 }
+        ],
+        chunks: [
+          { min: { id_movie: MinKey() }, max: { id_movie: Long('-8673436679026764421') }, 'on shard': 'shard1', 'last modified': Timestamp({ t: 2, i: 0 }) },
+          { min: { id_movie: Long('-8673436679026764421') }, max: { id_movie: Long('-8116765391937804045') }, 'on shard': 'shard3', 'last modified': Timestamp({ t: 3, i: 0 }) },
+          { min: { id_movie: Long('-8116765391937804045') }, max: { id_movie: Long('-7581059351134208132') }, 'on shard': 'shard1', 'last modified': Timestamp({ t: 4, i: 0 }) },
+          { min: { id_movie: Long('-7581059351134208132') }, max: { id_movie: Long('-7045082037612386922') }, 'on shard': 'shard3', 'last modified': Timestamp({ t: 5, i: 0 }) },
+          { min: { id_movie: Long('-7045082037612386922') }, max: { id_movie: Long('-6473247864526861297') }, 'on shard': 'shard1', 'last modified': Timestamp({ t: 6, i: 0 }) },
+          { min: { id_movie: Long('-6473247864526861297') }, max: { id_movie: Long('-5916677112797803459') }, 'on shard': 'shard3', 'last modified': Timestamp({ t: 7, i: 0 }) },
+          { min: { id_movie: Long('-5916677112797803459') }, max: { id_movie: Long('-5368824320328798308') }, 'on shard': 'shard1', 'last modified': Timestamp({ t: 8, i: 0 }) },
+          { min: { id_movie: Long('-5368824320328798308') }, max: { id_movie: Long('-4831073326004687904') }, 'on shard': 'shard3', 'last modified': Timestamp({ t: 9, i: 0 }) },
+          { min: { id_movie: Long('-4831073326004687904') }, max: { id_movie: Long('-4280848746359310712') }, 'on shard': 'shard3', 'last modified': Timestamp({ t: 10, i: 0 }) },
+          { min: { id_movie: Long('-4280848746359310712') }, max: { id_movie: Long('-3750889867108981459') }, 'on shard': 'shard1', 'last modified': Timestamp({ t: 11, i: 0 }) },
+          { min: { id_movie: Long('-3750889867108981459') }, max: { id_movie: Long('-3197530925796445389') }, 'on shard': 'shard3', 'last modified': Timestamp({ t: 12, i: 0 }) },
+          { min: { id_movie: Long('-3197530925796445389') }, max: { id_movie: Long('-2585879015751255647') }, 'on shard': 'shard1', 'last modified': Timestamp({ t: 13, i: 0 }) },
+          { min: { id_movie: Long('-2585879015751255647') }, max: { id_movie: Long('-2029302215416365563') }, 'on shard': 'shard3', 'last modified': Timestamp({ t: 14, i: 0 }) },
+          { min: { id_movie: Long('-2029302215416365563') }, max: { id_movie: Long('-1527113932854227127') }, 'on shard': 'shard1', 'last modified': Timestamp({ t: 15, i: 0 }) },
+          { min: { id_movie: Long('-1527113932854227127') }, max: { id_movie: Long('-952955036460765397') }, 'on shard': 'shard3', 'last modified': Timestamp({ t: 16, i: 0 }) },
+          { min: { id_movie: Long('-952955036460765397') }, max: { id_movie: Long('-388192221897983175') }, 'on shard': 'shard1', 'last modified': Timestamp({ t: 17, i: 0 }) },
+          { min: { id_movie: Long('-388192221897983175') }, max: { id_movie: Long('184575965605024283') }, 'on shard': 'shard3', 'last modified': Timestamp({ t: 18, i: 0 }) },
+          { min: { id_movie: Long('184575965605024283') }, max: { id_movie: Long('690178605808206347') }, 'on shard': 'shard1', 'last modified': Timestamp({ t: 19, i: 0 }) },
+          { min: { id_movie: Long('690178605808206347') }, max: { id_movie: Long('1238916416654033911') }, 'on shard': 'shard3', 'last modified': Timestamp({ t: 20, i: 0 }) },
+          { min: { id_movie: Long('1238916416654033911') }, max: { id_movie: Long('1821139508318001615') }, 'on shard': 'shard1', 'last modified': Timestamp({ t: 21, i: 0 }) },
+          'too many chunks to print, use verbose if you want to force print'
+        ],
+        tags: []
+      }
+    }
+  }
+]
+
+########## db.movies.getShardDistribution() ##########
+Shard shard1 at shard1/shard1a:27017,shard1b:27017,shard1c:27017
+{
+  data: '10.01MiB',
+  docs: 6490,
+  chunks: 10,
+  'estimated data per chunk': '1MiB',
+  'estimated docs per chunk': 649
+}
+---
+Shard shard2 at shard2/shard2a:27017,shard2b:27017,shard2c:27017
+{
+  data: '12.81MiB',
+  docs: 8369,
+  chunks: 1,
+  'estimated data per chunk': '12.81MiB',
+  'estimated docs per chunk': 8369
+}
+---
+Shard shard3 at shard3/shard3a:27017,shard3b:27017,shard3c:27017
+{
+  data: '9.96MiB',
+  docs: 6490,
+  chunks: 10,
+  'estimated data per chunk': '1020KiB',
+  'estimated docs per chunk': 649
+}
+---
+Totals
+{
+  data: '32.79MiB',
+  docs: 21349,
+  chunks: 21,
+  'Shard shard1': [
+    '30.53 % data',
+    '30.39 % docs in cluster',
+    '1KiB avg obj size on shard'
+  ],
+  'Shard shard2': [
+    '39.08 % data',
+    '39.2 % docs in cluster',
+    '1KiB avg obj size on shard'
+  ],
+  'Shard shard3': [
+    '30.38 % data',
+    '30.39 % docs in cluster',
+    '1KiB avg obj size on shard'
+  ]
+}
+
+########## documentos por shard ($shardedDataDistribution) ##########
+shard1: 6490 docs, huerfanos 0
+shard2: 8369 docs, huerfanos 0
+shard3: 6490 docs, huerfanos 0
+total (countDocuments): 21349

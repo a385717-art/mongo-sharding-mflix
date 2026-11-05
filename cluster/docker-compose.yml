@@ -1,0 +1,104 @@
+# Cluster de MongoDB con sharding para sample_mflix
+# 1 config server (replica set de 3 nodos), 3 shards (3 nodos cada uno) y 1 mongos
+name: mflix
+
+x-nodo: &nodo
+  image: mongo:7.0
+  restart: unless-stopped
+  networks:
+    - mflix-net
+
+services:
+  # ---------- config server ----------
+  cfg1:
+    <<: *nodo
+    container_name: mflix-cfg1
+    command: mongod --configsvr --replSet configRS --port 27017 --bind_ip_all --wiredTigerCacheSizeGB 0.25
+    volumes: [cfg1:/data/db]
+  cfg2:
+    <<: *nodo
+    container_name: mflix-cfg2
+    command: mongod --configsvr --replSet configRS --port 27017 --bind_ip_all --wiredTigerCacheSizeGB 0.25
+    volumes: [cfg2:/data/db]
+  cfg3:
+    <<: *nodo
+    container_name: mflix-cfg3
+    command: mongod --configsvr --replSet configRS --port 27017 --bind_ip_all --wiredTigerCacheSizeGB 0.25
+    volumes: [cfg3:/data/db]
+
+  # ---------- shard1 ----------
+  shard1a:
+    <<: *nodo
+    container_name: mflix-shard1a
+    command: mongod --shardsvr --replSet shard1 --port 27017 --bind_ip_all --wiredTigerCacheSizeGB 0.25 --setParameter orphanCleanupDelaySecs=60
+    volumes: [shard1a:/data/db]
+  shard1b:
+    <<: *nodo
+    container_name: mflix-shard1b
+    command: mongod --shardsvr --replSet shard1 --port 27017 --bind_ip_all --wiredTigerCacheSizeGB 0.25 --setParameter orphanCleanupDelaySecs=60
+    volumes: [shard1b:/data/db]
+  shard1c:
+    <<: *nodo
+    container_name: mflix-shard1c
+    command: mongod --shardsvr --replSet shard1 --port 27017 --bind_ip_all --wiredTigerCacheSizeGB 0.25 --setParameter orphanCleanupDelaySecs=60
+    volumes: [shard1c:/data/db]
+
+  # ---------- shard2 ----------
+  shard2a:
+    <<: *nodo
+    container_name: mflix-shard2a
+    command: mongod --shardsvr --replSet shard2 --port 27017 --bind_ip_all --wiredTigerCacheSizeGB 0.25 --setParameter orphanCleanupDelaySecs=60
+    volumes: [shard2a:/data/db]
+  shard2b:
+    <<: *nodo
+    container_name: mflix-shard2b
+    command: mongod --shardsvr --replSet shard2 --port 27017 --bind_ip_all --wiredTigerCacheSizeGB 0.25 --setParameter orphanCleanupDelaySecs=60
+    volumes: [shard2b:/data/db]
+  shard2c:
+    <<: *nodo
+    container_name: mflix-shard2c
+    command: mongod --shardsvr --replSet shard2 --port 27017 --bind_ip_all --wiredTigerCacheSizeGB 0.25 --setParameter orphanCleanupDelaySecs=60
+    volumes: [shard2c:/data/db]
+
+  # ---------- shard3 ----------
+  shard3a:
+    <<: *nodo
+    container_name: mflix-shard3a
+    command: mongod --shardsvr --replSet shard3 --port 27017 --bind_ip_all --wiredTigerCacheSizeGB 0.25 --setParameter orphanCleanupDelaySecs=60
+    volumes: [shard3a:/data/db]
+  shard3b:
+    <<: *nodo
+    container_name: mflix-shard3b
+    command: mongod --shardsvr --replSet shard3 --port 27017 --bind_ip_all --wiredTigerCacheSizeGB 0.25 --setParameter orphanCleanupDelaySecs=60
+    volumes: [shard3b:/data/db]
+  shard3c:
+    <<: *nodo
+    container_name: mflix-shard3c
+    command: mongod --shardsvr --replSet shard3 --port 27017 --bind_ip_all --wiredTigerCacheSizeGB 0.25 --setParameter orphanCleanupDelaySecs=60
+    volumes: [shard3c:/data/db]
+
+  # ---------- router ----------
+  mongos:
+    <<: *nodo
+    container_name: mflix-mongos
+    command: mongos --configdb configRS/cfg1:27017,cfg2:27017,cfg3:27017 --port 27017 --bind_ip_all
+    ports:
+      - "27117:27017"   # desde la compu: mongosh --port 27117
+    depends_on: [cfg1, cfg2, cfg3, shard1a, shard2a, shard3a]
+
+networks:
+  mflix-net:
+
+volumes:
+  cfg1:
+  cfg2:
+  cfg3:
+  shard1a:
+  shard1b:
+  shard1c:
+  shard2a:
+  shard2b:
+  shard2c:
+  shard3a:
+  shard3b:
+  shard3c:
