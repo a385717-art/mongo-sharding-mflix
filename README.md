@@ -105,3 +105,7 @@ En `cluster/evidencias/`:
 - `despues-de-shardear.txt`: `sh.status()` y `getShardDistribution()` recién shardeada la colección
 - `salida-crud.txt`: la salida de todas las operaciones
 - `despues-del-crud.txt`: `sh.status()` y `getShardDistribution()` después del CRUD
+
+## Reporte
+
+El reporte de la práctica (configuración, CRUD y balanceo) está en [report/Reporte_MongoDB_Sharding_mflix.pdf](report/Reporte_MongoDB_Sharding_mflix.pdf).
